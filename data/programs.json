@@ -1,0 +1,106 @@
+[
+  {
+    "id": 2,
+    "name": "Citizenship Class",
+    "category": "Settlement / Citizenship",
+    "description": "<strong>Canadian Citizenship Class</strong><br><br>📋 <strong>Purpose:</strong> Prepare for Canadian citizenship test<br>👥 <strong>Audience:</strong> Newcomers preparing for citizenship<br>✅ <strong>Eligibility:</strong> General newcomers; check with settlement team for specifics<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 3,
+    "name": "English Conversation Circle (In-Person)",
+    "category": "Education / Employment",
+    "description": "<strong>English Conversation Circle (In-Person)</strong><br><br>👥 <strong>Audience:</strong> Newcomers looking to practice conversational English and build networking skills<br>✅ <strong>Eligibility:</strong> Open to all newcomers; recommended for those seeking to improve daily communication and confidence in English<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 4,
+    "name": "English for Employment (In-Person)",
+    "category": "Education / Employment",
+    "description": "<strong>English for Employment (In-Person)</strong><br><br>👥 <strong>Audience:</strong> Newcomers seeking to improve English for job readiness and workplace communication<br>✅ <strong>Eligibility:</strong> Open to newcomers focused on employment preparation and skill-building<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 5,
+    "name": "ESL Conversation Group",
+    "category": "Language (ESL/LINC)",
+    "description": "<strong>ESL Conversation Group</strong><br><br>👥 <strong>Audience:</strong> Permanent Residents primarily; conversation-focused practice<br>✅ <strong>Eligibility:</strong> PRs; other statuses may be referred to partner agencies<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 6,
+    "name": "ESL for Seniors",
+    "category": "Language / Seniors",
+    "description": "<strong>ESL for Seniors</strong><br><br>👥 <strong>Audience:</strong> Senior newcomers learning English for daily communication<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 8,
+    "name": "Food Handler Certificate",
+    "category": "Employment / Skills Training",
+    "description": "<strong>Food Handler Certificate Program</strong><br><br>📋 <strong>Cost:</strong> $20 plus tax (certification exam fee)<br>⏱️ <strong>Duration:</strong> About 6 hours to complete course; up to 30 days for final exam<br>✅ <strong>Mandatory:</strong> Yes, required for food service premises in Ontario<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Book to join : <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 9,
+    "name": "Free English Class",
+    "category": "Education / Language",
+    "description": "<strong>Free English Classes</strong><br><br>We offer:<br>• ESL Conversation Circles (for Permanent Residents)<br>• English for Employment<br>• English Conversation Circle (In-Person)<br><br>📋 <strong>Levels:</strong> Beginner to high-intermediate<br>👥 <strong>Focus:</strong> Conversational English, job readiness, networking<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Book to join : <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 7,
+    "name": "Free Tax Clinic",
+    "category": "Tax & Financial Services",
+    "description": "<strong>Free Tax Clinic</strong><br><br>Our Free Tax Clinic offers:<br>• Free income tax filing (CRA partnership)<br>• For individuals/families earning under $35,000-$52,500<br>• In-person support with all paperwork<br><br>📋 <strong>Required documents:</strong> Government ID, SIN, T-slips<br>📞 <strong>How to book:</strong> Contact us via phone, email, or visit our website<br>🔗 Book: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 10,
+    "name": "G1 Driver's Licence Study Support",
+    "category": "Employment / Life Skills",
+    "description": "<strong>G1 Driver's Licence Study Support</strong><br><br>👥 <strong>Audience:</strong> Newcomers preparing for G1 test<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Book to join : <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 11,
+    "name": "Makeup Master Class",
+    "category": "Employment / Job Preparation",
+    "description": "<strong>Makeup Master Class</strong><br><br>👥 <strong>Audience:</strong> Newcomers seeking job readiness and professional presentation skills<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 12,
+    "name": "Nail Tech Training Program (Cohort 2)",
+    "category": "Employment / Skills Training",
+    "description": "<strong>Nail Tech Training Program (Cohort 2)</strong><br><br>👥 <strong>Audience:</strong> Newcomers and job seekers interested in nail technician careers<br>✅ <strong>Eligibility:</strong> Open to eligible newcomers registered with VWAT Employment Services<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Book to join : <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 13,
+    "name": "Tai Chi Class",
+    "category": "Health & Wellness / Seniors",
+    "description": "<strong>Tai Chi Class</strong><br><br>👥 <strong>Audience:</strong> Seniors seeking relaxation, balance, and gentle physical exercise<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 14,
+    "name": "Zumba Class",
+    "category": "Health & Wellness / Seniors",
+    "description": "<strong>Zumba Class</strong><br><br>👥 <strong>Audience:</strong> Seniors participating in weekly group fitness and wellness programs<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  }
+]

@@ -1,0 +1,82 @@
+{
+  "name": "VWAT Family Services (Vietnamese Women's Association of Toronto)",
+  "aka": [
+    "VWAT",
+    "Vietnamese Women's Association of Toronto",
+    "VWAT Family Services"
+  ],
+  "mission": "Non-profit helping refugee and immigrant families integrate into Canadian society since 1982; services for newcomers, youth, and seniors; preserving Vietnamese heritage via cultural festivals.",
+  "wecaire_values": [
+    "Wholesome",
+    "Excellence",
+    "Care",
+    "Accountability",
+    "Inclusion",
+    "Respect",
+    "Equity"
+  ],
+  "address": {
+    "street": "1756 St. Clair Ave West",
+    "city": "Toronto",
+    "province": "ON",
+    "postal_code": "M6N 1J3",
+    "country": "Canada"
+  },
+  "geo_hint": "Along Garrison Creek south of Davenport Road; Treaty 13 territory (land acknowledgement).",
+  "hours": {
+    "monday_friday": "9:00 AM – 4:30 PM",
+    "saturday": "Closed",
+    "sunday": "Closed",
+    "holidays": "Closed"
+  },
+  "phones": [
+    {
+      "label": "Main",
+      "number": "+1-647-343-8928"
+    },
+    {
+      "label": "Alternate/Cell",
+      "number": "+1-437-886-4956"
+    }
+  ],
+  "phone_menu": [
+    {
+      "digit": "1",
+      "description": "Settlement Services"
+    },
+    {
+      "digit": "2",
+      "description": "Senior Programs"
+    },
+    {
+      "digit": "3",
+      "description": "Youth Activities or Volunteer opportunities"
+    }
+  ],
+  "emails": {
+    "general": "info@vwat.org",
+    "settlement": "newcomers@vwat.org",
+    "seniors": "seniors@vwat.org",
+    "youth": "youth@vwat.org",
+    "employment": "employment@vwat.org"
+  },
+  "website": "https://www.vwat.org",
+  "appointments_url": "https://www.vwat.org/appointments/",
+  "social": {
+    "facebook": "Facebook",
+    "youtube": "YouTube"
+  },
+  "directions": {
+    "from_st_clair_west_station": "#512 St. Clair streetcar W to Silverthorn Ave.",
+    "from_jane_finch": "#35 Jane bus S to Weston Rd → #89 Weston bus S to Avon Ave Loop → #168 Symington S to St. Clair Ave.",
+    "from_keele_station": "#41 Keele bus N to Old Weston Rd."
+  },
+  "metrics_2023": {
+    "settlement_services": 5631,
+    "youth_ticket_giveaways": 292,
+    "settlement_clients": 1757,
+    "employment_workshops": 36,
+    "seniors_served": 332
+  },
+  "land_acknowledgement": "VWAT Family Services acknowledges we are on the land of many nations including the Mississaugas of the Credit,\nthe Anishnabeg, the Haudenosaunee, the Chippewa and Wendat peoples. This area is covered by Treaty 13.\nToronto derives from the Mohawk word “Tkaronto,” “the place in the water where the trees are standing.”"
+}

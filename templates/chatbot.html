@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VWAT Chatbot - Family Services Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+<!--        -->
+
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+
+            <h1>🌸 VWAT Family Services</h1>
+            <p>Vietnamese Women's Association of Toronto</p>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="userInput" placeholder="Type a message..." />
+            <button class="send-button" id="sendButton">➤</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
+</body>
+</html>

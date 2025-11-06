@@ -1,0 +1,141 @@
+[
+  {
+    "category": "Newcomer Settlement",
+    "short": "Settlement services and orientation for individuals and families.",
+    "offers": [
+      "Employment & housing support",
+      "Sponsorship, citizenship & visa applications",
+      "Form filling; translating & completing paperwork",
+      "Obtaining IDs & documents (PR, OHIP, driver’s licence)",
+      "Counselling & referrals",
+      "Orientation to Toronto & Canadian life",
+      "Commissioner services",
+      "Personal income tax filing (see Free Tax Clinic program)",
+      "Translation (English–Vietnamese)",
+      "Housing & social benefits applications",
+      "Legal information",
+      "Certificates: birth/death, marriage/divorce",
+      "Wills & funeral planning",
+      "Citizenship preparation class",
+      "ESL Conversation Group"
+    ],
+    "eligibility": "Open to newcomers; focus on Vietnamese community but serves all eligible clients. Some workshops/classes specify PR/refugee eligibility.",
+    "contacts": [
+      {
+        "name": "Thuy Nguyen",
+        "phone": "+1-647-343-8928 x112",
+        "email": "tnguyen@vwat.org"
+      },
+      {
+        "name": "Hieu To",
+        "phone": "+1-647-343-8928 x114",
+        "email": "hieu@vwat.org"
+      },
+      {
+        "name": "Nhut-Suong Cu (Jessie)",
+        "phone": "+1-647-343-8928 x117",
+        "email": "suong@vwat.org"
+      },
+      {
+        "name": "Chieu Nguyen",
+        "phone": "+1-647-343-8928 x113",
+        "email": "chieunguyen@vwat.org"
+      },
+      {
+        "name": "Thao Pham",
+        "phone": "+1-647-343-8928 x115",
+        "email": "tpham@vwat.org"
+      }
+    ],
+    "languages": [
+      "English",
+      "Vietnamese",
+      "French referral via Centre Francophone du Grand Toronto"
+    ],
+    "external_referrals": [
+      {
+        "name": "Centre Francophone du Grand Toronto",
+        "phone": "+1-416-922-2672",
+        "url": "https://ac.centrefranco.org/"
+      }
+    ],
+    "workshops": [
+      "Financial Planning",
+      "Personal Income Taxes",
+      "Power of Attorney & Living Wills",
+      "Dying with Dignity"
+    ],
+    "classes": [
+      {
+        "name": "Canadian Citizenship Class"
+      },
+      {
+        "name": "ESL Conversation Group"
+      }
+    ]
+  },
+  {
+    "category": "Employment",
+    "short": "Employment-related support for newcomers (since Apr 2020).",
+    "offers": [
+      "One-on-one employment counselling",
+      "Resume writing and screening",
+      "Interview prep and mock interviews",
+      "Job search support and matching",
+      "Temporary placements, mentoring, licensure prep",
+      "Networking opportunities",
+      "Continuing education guidance",
+      "Volunteer opportunities"
+    ],
+    "programs_highlights": [
+      "Nail Tech Training Program (Cohort 2)",
+      "Food Handler’s Certification (Cohort 2)",
+      "English for Employment",
+      "G1 Driver’s Licence Study Support",
+      "Citizenship Class",
+      "English Conversation Circle"
+    ],
+    "notes": "Resume writing services are free (IRCC-funded) at VWAT.",
+    "eligibility": "Primarily newcomers; open consult with employment team.",
+    "group_link": "Facebook: VWAT Employment Services"
+  },
+  {
+    "category": "Seniors",
+    "short": "Free services for seniors: social connection, benefits, wellness.",
+    "offers": [
+      "Assistance with OAS, GIS, CPP applications",
+      "Ontario Drug Benefit (under 65) assistance",
+      "Ontario Seniors Dental Care Program (65+) applications",
+      "Ontario Works (under 65) applications",
+      "Toronto Subsidized Housing applications (Toronto Housing + Service Canada accounts)",
+      "Job search help (resumes, cover letters, interviewing, networking)",
+      "Weekly fitness classes, neighbourhood walks",
+      "Healthy eating & cooking classes",
+      "One-on-one appointments for benefits & housing",
+      "Health & wellness resources",
+      "Volunteer opportunities"
+    ],
+    "eligibility": "Seniors in Toronto; certain benefits have age/income requirements.",
+    "notes": "Additional city-wide resources include Toronto Seniors Helpline; community supports; in-home help; transportation; friendly outreach; workshops; technology training; financial guidance; elder abuse prevention; emergency preparedness; caregiver supports."
+  },
+  {
+    "category": "Youth",
+    "short": "Volunteer & leadership opportunities for ages ~13–25; camps & festivals.",
+    "offers": [
+      "Youth Group (leadership, volunteering, workshops, mentorship)",
+      "Summer Day Camp (leadership development, CSJ-funded roles)",
+      "Cultural festival volunteering (Lunar New Year, Trung Sisters, Children’s Lantern Festival)",
+      "Recreational activities; field trips; arts & crafts",
+      "Workshops (leadership, communication, goal-setting)",
+      "Critical discussions (racism, bullying, mental health)",
+      "Volunteer hours for graduation"
+    ],
+    "goals": [
+      "Openness to new experiences",
+      "Social responsibility",
+      "Transferable skills for future careers",
+      "Supportive networks with community and peers"
+    ],
+    "eligibility": "Youth (approx. 13–25). Newcomers prioritized but open to broader community."
+  }
+]
