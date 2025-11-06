@@ -33,15 +33,41 @@ setTimeout(() => {
     }, 2000);
 }, 500);
 
-function addBotMessage(text) {
+function addBotMessage(text, streaming = false) {
     const messageDiv = document.createElement('div');
     messageDiv.className = 'message bot';
-    messageDiv.innerHTML = `
-        <div class="avatar">👩‍💼</div>
-        <div class="message-content">${text}</div>
-    `;
-    chatMessages.appendChild(messageDiv);
-    scrollToBottom();
+    
+    if (streaming) {
+        // Add empty message that will be filled with streaming text
+        messageDiv.innerHTML = `
+            <div class="avatar">👩‍💼</div>
+            <div class="message-content"><span class="streaming-text"></span></div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+        
+        // Simulate streaming by displaying words one by one
+        const contentSpan = messageDiv.querySelector('.streaming-text');
+        const words = text.split(' ');
+        let currentIndex = 0;
+        
+        const streamInterval = setInterval(() => {
+            if (currentIndex < words.length) {
+                contentSpan.innerHTML += (currentIndex > 0 ? ' ' : '') + words[currentIndex];
+                currentIndex++;
+                scrollToBottom();
+            } else {
+                clearInterval(streamInterval);
+            }
+        }, 50); // 50ms delay between words
+    } else {
+        messageDiv.innerHTML = `
+            <div class="avatar">👩‍💼</div>
+            <div class="message-content">${text}</div>
+        `;
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
 }
 
 function addBotMessageWithOptions(text, options) {
@@ -310,10 +336,36 @@ function handleUserInput() {
     userInput.value = '';
     
     showTypingIndicator();
-    setTimeout(() => {
+    
+    // Call RAG endpoint
+    fetch('/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: text })
+    })
+    .then(response => response.json())
+    .then(data => {
         removeTypingIndicator();
-        addBotMessage('Thank you for your message! For specific information, please select from the menu options above, or contact us directly at newcomers@vwat.org or +1-647-343-8928.');
-    }, 1000);
+        if (data.status === 'success') {
+            // Use streaming effect for RAG responses
+            addBotMessage(data.response, true);
+            
+            // Optionally show sources
+            if (data.sources && data.sources.length > 0) {
+                const sourcesText = 'Sources: ' + data.sources.map(s => s.source).join(', ');
+                console.log(sourcesText);  // Log sources for debugging
+            }
+        } else {
+            addBotMessage('Sorry, I couldn\'t process your question. Please try again or select from the menu options.');
+        }
+    })
+    .catch(error => {
+        removeTypingIndicator();
+        console.error('Error:', error);
+        addBotMessage('Sorry, an error occurred. Please try again or contact us at info@vwat.org or +1-647-343-8928.');
+    });
 }
 
 sendButton.addEventListener('click', handleUserInput);

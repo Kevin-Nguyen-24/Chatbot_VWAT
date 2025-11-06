@@ -1,7 +1,15 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, Response, stream_with_context
 import os
+import json
+import time
+from rag_system import initialize_rag, get_rag_response
 
 app = Flask(__name__)
+
+# Initialize RAG system on startup
+print("Initializing RAG system...")
+initialize_rag()
+print("RAG system initialized!")
 
 @app.route('/')
 def index():
@@ -14,27 +22,38 @@ def serve_data(filename):
 @app.route('/chat', methods=['POST'])
 def chat():
     """
-    Handle chat messages from the frontend.
+    Handle chat messages from the frontend using RAG.
     Expects JSON with 'message' field.
     """
     try:
         data = request.get_json()
         user_message = data.get('message', '')
         
-        # TODO: Add your chatbot logic here
-        # For now, returning a simple echo response
-        bot_response = f"You said: {user_message}"
+        if not user_message.strip():
+            return jsonify({
+                'response': 'Please enter a question.',
+                'status': 'error'
+            })
+        
+        # Use RAG system to generate response
+        rag_result = get_rag_response(user_message)
         
         return jsonify({
-            'response': bot_response,
-            'status': 'success'
+            'response': rag_result['response'],
+            'status': 'success',
+            'sources': [{
+                'source': doc['source'],
+                'score': doc['score']
+            } for doc in rag_result['retrieved_docs'][:3]]  # Return top 3 sources
         })
     except Exception as e:
+        print(f"Error in chat endpoint: {str(e)}")
         return jsonify({
-            'response': 'Sorry, an error occurred.',
+            'response': 'Sorry, I encountered an error. Please try again or contact us directly at info@vwat.org or +1-647-343-8928.',
             'status': 'error',
             'error': str(e)
         }), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=8000)
+    # Disable reloader to prevent Qdrant locking issues
+    app.run(debug=True, host='localhost', port=8000, use_reloader=False)
