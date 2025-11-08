@@ -355,7 +355,7 @@ class LLMClient:
                 response = requests.post(
                     endpoint,
                     json={
-                        "model": "gemma",
+                        "model": "gemma3:4b",
                         "prompt": prompt,
                         "stream": stream,
                         "options": {
@@ -390,12 +390,20 @@ def create_rag_prompt(query: str, context: str) -> str:
 
 Use the following context to answer the user's question. Be concise, helpful, and accurate.
 
+IMPORTANT INSTRUCTIONS:
+- Answer the question directly - DO NOT repeat or rephrase the question
+- Use bullet points (•) when listing multiple items, services, or options
+- Keep paragraphs short and easy to read
+- Use line breaks between different sections
+- Include contact information when relevant
+- Start with the answer immediately
+
 CONTEXT:
 {context}
 
 USER QUESTION: {query}
 
-ANSWER:"""
+ANSWER (start directly with the answer, do not repeat the question):"""
     return prompt
 
 
@@ -437,6 +445,10 @@ def get_rag_response(query: str) -> Dict[str, Any]:
     # Generate response
     response = llm_client.generate(prompt)
     
+    # Convert newlines to HTML breaks for proper display
+    if response and "Error" not in response and "trouble connecting" not in response:
+        response = response.replace('\n', '<br>')
+    
     # If LLM fails, use the top retrieved document as fallback
     if "Error" in response or "trouble connecting" in response:
         # Extract answer from top document
@@ -445,10 +457,20 @@ def get_rag_response(query: str) -> Dict[str, Any]:
         text = top_doc['text']
         if 'Answer:' in text:
             # Extract answer part from Q&A format
-            answer = text.split('Answer:')[1].strip()
-            response = answer
+            parts = text.split('Answer:')
+            if len(parts) > 1:
+                answer = parts[1].strip()
+                response = answer
+            else:
+                response = text
+        elif 'Question:' in text and 'Answer:' not in text:
+            # If it's just a question without answer, skip it
+            response = "I found information about that. Please contact us at info@vwat.org or +1-647-343-8928 for details."
         else:
             response = text
+        
+        # Format the response with HTML line breaks for better display
+        response = response.replace('\n', '<br>')
     
     return {
         'response': response,

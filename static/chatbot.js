@@ -335,9 +335,52 @@ function handleUserInput() {
     addUserMessage(text);
     userInput.value = '';
     
+    // Check for specific intents and route to rule-based responses
+    const lowerText = text.toLowerCase();
+    
+    // Appointment-related queries
+    if (lowerText.includes('appointment') || lowerText.includes('book') && (lowerText.includes('appointment') || lowerText.includes('visit') || lowerText.includes('meeting'))) {
+        showTypingIndicator();
+        setTimeout(() => {
+            removeTypingIndicator();
+            respondToOption('Appointment');
+        }, 1000);
+        return;
+    }
+    
+    // Services-related queries
+    if (lowerText.includes('what services') || lowerText.includes('services do you offer')) {
+        showTypingIndicator();
+        setTimeout(() => {
+            removeTypingIndicator();
+            respondToOption('Services');
+        }, 1000);
+        return;
+    }
+    
+    // Programs-related queries  
+    if ((lowerText.includes('what programs') || lowerText.includes('programs available') || lowerText.includes('list programs')) && !lowerText.includes('seniors') && !lowerText.includes('youth')) {
+        showTypingIndicator();
+        setTimeout(() => {
+            removeTypingIndicator();
+            respondToOption('Programs');
+        }, 1000);
+        return;
+    }
+    
+    // Contact information queries
+    if (lowerText.includes('contact') || lowerText.includes('phone') || lowerText.includes('email') || lowerText.includes('address') || lowerText.includes('location') || lowerText.includes('where is vwat') || lowerText.includes('where are you located')) {
+        showTypingIndicator();
+        setTimeout(() => {
+            removeTypingIndicator();
+            respondToOption('Contact Information');
+        }, 1000);
+        return;
+    }
+    
     showTypingIndicator();
     
-    // Call RAG endpoint
+    // Use RAG for everything else
     fetch('/chat', {
         method: 'POST',
         headers: {
@@ -357,6 +400,15 @@ function handleUserInput() {
                 const sourcesText = 'Sources: ' + data.sources.map(s => s.source).join(', ');
                 console.log(sourcesText);  // Log sources for debugging
             }
+            
+            // Add follow-up question after streaming completes
+            // Calculate total streaming time based on word count
+            const words = data.response.split(' ');
+            const streamingTime = words.length * 50; // 50ms per word
+            
+            setTimeout(() => {
+                addBotMessageWithQuickReplies('Can I help you with anything else?', ['Yes', 'No']);
+            }, streamingTime + 500); // Wait for streaming + 500ms buffer
         } else {
             addBotMessage('Sorry, I couldn\'t process your question. Please try again or select from the menu options.');
         }
