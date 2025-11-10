@@ -23,20 +23,22 @@ def serve_data(filename):
 def chat():
     """
     Handle chat messages from the frontend using RAG.
-    Expects JSON with 'message' field.
+    Expects JSON with 'message' and 'language' fields.
     """
     try:
         data = request.get_json()
         user_message = data.get('message', '')
+        language = data.get('language', 'vi')  # Default to Vietnamese
         
         if not user_message.strip():
+            error_msg = 'Vui lòng nhập câu hỏi.' if language == 'vi' else 'Please enter a question.'
             return jsonify({
-                'response': 'Please enter a question.',
+                'response': error_msg,
                 'status': 'error'
             })
         
-        # Use RAG system to generate response
-        rag_result = get_rag_response(user_message)
+        # Use RAG system to generate response with language parameter
+        rag_result = get_rag_response(user_message, language)
         
         return jsonify({
             'response': rag_result['response'],
@@ -48,8 +50,9 @@ def chat():
         })
     except Exception as e:
         print(f"Error in chat endpoint: {str(e)}")
+        error_msg = 'Xin lỗi, đã xảy ra lỗi. Vui lòng thử lại hoặc liên hệ chúng tôi tại info@vwat.org hoặc +1-647-343-8928.' if data.get('language') == 'vi' else 'Sorry, I encountered an error. Please try again or contact us directly at info@vwat.org or +1-647-343-8928.'
         return jsonify({
-            'response': 'Sorry, I encountered an error. Please try again or contact us directly at info@vwat.org or +1-647-343-8928.',
+            'response': error_msg,
             'status': 'error',
             'error': str(e)
         }), 500

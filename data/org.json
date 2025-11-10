@@ -6,15 +6,23 @@
     "VWAT Family Services"
   ],
   "mission": "Non-profit helping refugee and immigrant families integrate into Canadian society since 1982; services for newcomers, youth, and seniors; preserving Vietnamese heritage via cultural festivals.",
-  "wecaire_values": [
-    "Wholesome",
-    "Excellence",
-    "Care",
-    "Accountability",
-    "Inclusion",
-    "Respect",
-    "Equity"
+  "core_values": [
+    "Helping refugees and immigrants integrate into Canadian society",
+    "Preserving Vietnamese heritage through annual cultural festivals",
+    "Improving the lives of people who have moved to Canada"
   ],
+  "wecaire_values": {
+    "description": "WECAIRE represents our organizational values",
+    "values": [
+      {"letter": "W", "value": "Wholesome", "description": "Promoting healthy, balanced well-being for all community members"},
+      {"letter": "E", "value": "Excellence", "description": "Striving for the highest quality in all our services and programs"},
+      {"letter": "C", "value": "Care", "description": "Showing compassion and support to everyone we serve"},
+      {"letter": "A", "value": "Accountability", "description": "Taking responsibility for our actions and commitments"},
+      {"letter": "I", "value": "Inclusion", "description": "Welcoming and respecting people from all backgrounds"},
+      {"letter": "R", "value": "Respect", "description": "Treating everyone with dignity and consideration"},
+      {"letter": "E", "value": "Equity", "description": "Ensuring fair access and opportunities for all"}
+    ]
+  },
   "address": {
     "street": "1756 St. Clair Ave West",
     "city": "Toronto",

@@ -11,9 +11,12 @@
 <body>
     <div class="chat-container">
         <div class="chat-header">
-
             <h1>🌸 VWAT Family Services</h1>
             <p>Vietnamese Women's Association of Toronto</p>
+            <div class="language-selector">
+                <button class="lang-btn" id="langVi" onclick="switchLanguage('vi')">Tiếng Việt</button>
+                <button class="lang-btn" id="langEn" onclick="switchLanguage('en')">English</button>
+            </div>
         </div>
 
         <div class="chat-messages" id="chatMessages">
@@ -26,6 +29,7 @@
         </div>
     </div>
 
+    <script src="{{ url_for('static', filename='languages.js') }}"></script>
     <script src="{{ url_for('static', filename='chatbot.js') }}"></script>
 </body>
 </html>

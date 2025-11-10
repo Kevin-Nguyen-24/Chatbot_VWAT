@@ -6,32 +6,173 @@ const sendButton = document.getElementById('sendButton');
 let programsData = [];
 let programsLoaded = false;
 
-// Load programs data from JSON
-fetch('data/programs.json')
-  .then(response => response.json())
-  .then(data => {
-    programsData = data;
-    programsLoaded = true;
-    console.log('Programs loaded:', programsData);
-  })
-  .catch(error => {
-    console.error('Error loading programs:', error);
-    programsData = [];
-    programsLoaded = true;
-  });
+// Store events data
+let eventsData = [];
+let eventsLoaded = false;
 
-// Initial welcome message
-setTimeout(() => {
-    addBotMessage('Welcome to VWAT Family Services! I\'m here to help you learn about our services and programs.');
+// Language switching function
+function switchLanguage(lang) {
+    setLanguage(lang);
+    
+    // Reload programs for the new language
+    programsLoaded = false;
+    loadPrograms(lang);
+    
+    // Update button states
+    document.getElementById('langVi').classList.toggle('active', lang === 'vi');
+    document.getElementById('langEn').classList.toggle('active', lang === 'en');
+    
+    // Update input placeholder
+    userInput.placeholder = t('inputPlaceholder');
+    
+    // Clear and restart conversation
+    chatMessages.innerHTML = '';
+    initializeChat();
+}
+
+// Initialize chat with current language
+function initializeChat() {
     setTimeout(() => {
-        addBotMessageWithOptions('What can I help you with?', [
-            'Services',
-            'Programs',
-            'Appointment',
-            'Contact Information'
-        ]);
-    }, 2000);
-}, 500);
+        addBotMessage(t('welcomeMessage'));
+        setTimeout(() => {
+            addBotMessageWithOptions(t('helpQuestion'), [
+                t('services'),
+                t('programs'),
+                t('events'),
+                t('appointment'),
+                t('contactInfo')
+            ]);
+        }, 2000);
+    }, 500);
+}
+
+// Set initial language button state on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const savedLang = getSavedLanguage();
+    currentLanguage = savedLang;
+    document.getElementById('langVi').classList.toggle('active', savedLang === 'vi');
+    document.getElementById('langEn').classList.toggle('active', savedLang === 'en');
+    userInput.placeholder = t('inputPlaceholder');
+});
+
+// Function to load programs based on language
+function loadPrograms(lang) {
+    const programFile = lang === 'vi' ? 'data/programs_vietnamese.json' : 'data/programs.json';
+    fetch(programFile)
+      .then(response => response.json())
+      .then(data => {
+        programsData = data;
+        programsLoaded = true;
+        console.log('Programs loaded for', lang, ':', programsData);
+      })
+      .catch(error => {
+        console.error('Error loading programs:', error);
+        programsData = [];
+        programsLoaded = true;
+      });
+}
+
+// Function to load events
+function loadEvents() {
+    fetch('data/events.json')
+      .then(response => response.json())
+      .then(data => {
+        eventsData = data;
+        eventsLoaded = true;
+        console.log('Events loaded:', eventsData);
+      })
+      .catch(error => {
+        console.error('Error loading events:', error);
+        eventsData = [];
+        eventsLoaded = true;
+      });
+}
+
+// Function to format date
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const months = currentLanguage === 'vi' 
+        ? ['Th\u00e1ng 1', 'Th\u00e1ng 2', 'Th\u00e1ng 3', 'Th\u00e1ng 4', 'Th\u00e1ng 5', 'Th\u00e1ng 6', 
+           'Th\u00e1ng 7', 'Th\u00e1ng 8', 'Th\u00e1ng 9', 'Th\u00e1ng 10', 'Th\u00e1ng 11', 'Th\u00e1ng 12']
+        : ['January', 'February', 'March', 'April', 'May', 'June',
+           'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    const days = currentLanguage === 'vi'
+        ? ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+        : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    
+    const dayName = days[date.getDay()];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    
+    return currentLanguage === 'vi' 
+        ? `${dayName}, ${day} ${month}`
+        : `${dayName}, ${month} ${day}`;
+}
+
+// Function to display events calendar
+function displayEventsCalendar() {
+    if (!eventsLoaded || !eventsData || eventsData.length === 0) {
+        return t('noEventsAvailable');
+    }
+    
+    // Sort events by date
+    const sortedEvents = [...eventsData].sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // Filter upcoming events (from today onwards)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const upcomingEvents = sortedEvents.filter(event => new Date(event.date) >= today);
+    
+    if (upcomingEvents.length === 0) {
+        return t('noEventsAvailable');
+    }
+    
+    // Create calendar HTML
+    let calendarHTML = `<div class="events-calendar">`;
+    calendarHTML += `<h3 style="margin-top: 0; color: #7b1fa2;">\ud83d\udcc5 ${t('upcomingEvents')}</h3>`;
+    calendarHTML += `<div class="events-grid">`;
+    
+    upcomingEvents.slice(0, 6).forEach(event => {
+        calendarHTML += `
+            <div class="event-card">
+                <div class="event-header">
+                    <strong>${event.title}</strong>
+                    <span class="event-category">${event.category}</span>
+                </div>
+                <div class="event-details">
+                    <div>\ud83d\udcc5 ${formatDate(event.date)}</div>
+                    <div>\u23f0 ${event.time}</div>
+                    ${event.spots ? `<div>\ud83c\udfab ${event.spots}</div>` : ''}
+                </div>
+                ${event.description ? `<p class="event-desc">${event.description}</p>` : ''}
+                <button class="event-register-btn" onclick="window.open('${event.link}', '_blank')">
+                    ${t('registerEvent')}
+                </button>
+            </div>
+        `;
+    });
+    
+    calendarHTML += `</div>`; // Close events-grid
+    
+    calendarHTML += `
+        <div class="view-more-events">
+            <button class="option-button" onclick="window.open('https://www.vwat.org/events/', '_blank')">
+                ${t('viewFullCalendar')}
+            </button>
+        </div>
+    </div>`;
+    
+    return calendarHTML;
+}
+
+// Load programs for initial language
+loadPrograms(currentLanguage);
+// Load events
+loadEvents();
+
+// Initial welcome message (called after language is initialized)
+initializeChat();
 
 function addBotMessage(text, streaming = false) {
     const messageDiv = document.createElement('div');
@@ -176,15 +317,17 @@ function handleQuickReply(reply) {
     
     setTimeout(() => {
         removeTypingIndicator();
-        if (reply === 'Yes') {
-            addBotMessageWithOptions('What else would you like to know?', [
-                'Services',
-                'Programs',
-                'Appointment',
-                'Contact Information'
+        // Check both English and Vietnamese "Yes"
+        if (reply === t('yes') || reply === 'Yes' || reply === 'Có') {
+            addBotMessageWithOptions(t('whatElse'), [
+                t('services'),
+                t('programs'),
+                t('events'),
+                t('appointment'),
+                t('contactInfo')
             ]);
         } else {
-            addBotMessage('Thank you for chatting with us! If you need help in the future, feel free to reach out. Have a great day! 🌸');
+            addBotMessage(t('goodbye'));
         }
     }, 800);
 }
@@ -193,26 +336,30 @@ function respondToOption(option) {
     let response = '';
     
     switch(option) {
+        case t('services'):
         case 'Services':
+        case 'Dịch vụ':
             // Show services sub-menu
-            addBotMessageWithOptions('Please select a service:', [
-                'Newcomer Services',
-                'Employment Services',
-                'Senior Services',
-                'Youth Services'
+            addBotMessageWithOptions(t('selectService'), [
+                t('newcomerServices'),
+                t('employmentServices'),
+                t('seniorServices'),
+                t('youthServices')
             ]);
             return; // Don't show "Can I help you with anything else?" yet
             
+        case t('programs'):
         case 'Programs':
+        case 'Chương trình':
             // Show programs sub-menu - filter by expired=no and news=yes
             if (!programsLoaded) {
-                addBotMessage('Loading programs... Please wait a moment.');
+                addBotMessage(t('loadingPrograms'));
                 // Retry after a short delay
                 setTimeout(() => {
                     if (programsLoaded) {
-                        respondToOption('Programs');
+                        respondToOption(t('programs'));
                     } else {
-                        addBotMessage('Sorry, unable to load programs. Please try again or contact us directly.');
+                        addBotMessage(t('unableToLoadPrograms'));
                     }
                 }, 1000);
                 return;
@@ -228,86 +375,104 @@ function respondToOption(option) {
                 const programNames = activeNewPrograms.map(program => program.name);
                 
                 // Add "More Programs" button
-                programNames.push('More Programs');
+                programNames.push(t('morePrograms'));
                 
                 if (programNames.length > 1) {
-                    addBotMessageWithOptions('Please select a program:', programNames);
+                    addBotMessageWithOptions(t('selectProgram'), programNames);
                 } else {
                     // Only "More Programs" available
-                    addBotMessage('No new programs available at the moment.');
+                    addBotMessage(t('noNewPrograms'));
                     setTimeout(() => {
-                        addBotMessageWithOptions('Would you like to:', ['More Programs', 'Back to Menu']);
+                        addBotMessageWithOptions(t('wouldYouLike'), [t('morePrograms'), t('backToMenu')]);
                     }, 500);
                 }
             } else {
-                addBotMessage('No programs available at the moment.');
+                addBotMessage(t('noProgramsAvailable'));
                 setTimeout(() => {
-                    addBotMessageWithOptions('Would you like to:', ['More Programs', 'Back to Menu']);
+                    addBotMessageWithOptions(t('wouldYouLike'), [t('morePrograms'), t('backToMenu')]);
                 }, 500);
             }
             return; // Don't show "Can I help you with anything else?" yet
             
+        case t('events'):
+        case 'Events':
+        case 'S\u1ef1 ki\u1ec7n':
+            // Display events calendar
+            const eventsHTML = displayEventsCalendar();
+            const eventsDiv = document.createElement('div');
+            eventsDiv.className = 'message bot';
+            eventsDiv.innerHTML = `
+                <div class="avatar">\ud83d\udc69\u200d\ud83d\udcbc</div>
+                <div class="message-content">
+                    ${eventsHTML}
+                </div>
+            `;
+            chatMessages.appendChild(eventsDiv);
+            scrollToBottom();
+            setTimeout(() => {
+                addBotMessageWithQuickReplies(t('anythingElse'), [t('yes'), t('no')]);
+            }, 500);
+            return;
+            
+        case t('newcomerServices'):
         case 'Newcomer Services':
-            response = 'Our Newcomer Settlement services include:<br><br>• Form Filling<br>• Language Support (ESL / LINC)<br>• Citizenship Preparation & Status<br>• PR, OHIP, Driver\'s license<br>• Commissioner Services<br>• Personal Income Tax filing<br>• Translation Services (English – Vietnamese)<br>• Housing Applications<br>• Social Benefits Applications<br>• Legal Information<br>• Certificates for: Birth & Death, Marriage & Divorce<br>• Wills & Funeral Planning<br><br>📧 Email: newcomers@vwat.org<br>📞 Phone: +1-647-343-8928';
+        case 'Dịch vụ Người mới đến':
+            response = t('newcomerServicesDesc');
             break;
+        case t('employmentServices'):
         case 'Employment Services':
-            response = 'We offer free employment services for newcomers:<br><br>• Education Credential Evaluation Assistance<br>• Resume and Interview<br>• Job Search Support<br>• Career Assessment & Planning<br>• Continuing Education<br>• Volunteer Opportunities<br><br>📧 Email: employment@vwat.org<br>🔗 Book: <a href="https://www.vwat.org/appointments/" target="_blank">www.vwat.org/appointments</a>';
+        case 'Dịch vụ Việc làm':
+            response = t('employmentServicesDesc');
             break;
+        case t('seniorServices'):
         case 'Senior Services':
-            response = 'Free services for seniors include:<br><br>• OAS, GIS, CPP applications<br>• Ontario Seniors Dental Care Program<br>• Subsidized housing applications<br>• Weekly fitness classes<br>• Health & wellness resources<br><br>📧 Email: seniors@vwat.org<br>📞 Phone: +1-647-343-8928';
+        case 'Dịch vụ Người cao tuổi':
+            response = t('seniorServicesDesc');
             break;
+        case t('youthServices'):
         case 'Youth Services':
-            response = 'Youth programs (ages 13-25):<br><br>• Youth Group & leadership workshops<br>• Summer Day Camp<br>• Cultural festival volunteering<br>• Volunteer hours for graduation<br>• Field trips & recreational activities<br><br>📧 Email: youth@vwat.org<br>📞 Phone: +1-647-343-8928';
+        case 'Dịch vụ Thanh thiếu niên':
+            response = t('youthServicesDesc');
             break;
+        case t('morePrograms'):
         case 'More Programs':
-            response = '🌟 <strong>More Programs & Events Await!</strong><br>Join us for ongoing classes, seasonal festivals, and special community activities for newcomers, seniors, youth, and families.<br><br>🔗 <a href="https://www.vwat.org/events/" target="_blank">View All Programs & Events</a>';
+        case 'Thêm Chương trình':
+            response = t('moreProgramsDesc');
             break;
+        case t('appointment'):
         case 'Appointment':
+        case 'Đặt lịch hẹn':
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message bot';
             messageDiv.innerHTML = `
                 <div class="avatar">👩‍💼</div>
                 <div class="message-content">
-                    📅 <strong>Book an Appointment</strong><br><br>
-                    Schedule your appointment for:<br>
-                    • Settlement Services<br>
-                    • Employment Support<br>
-                    • Free Tax Clinic<br>
-                    • Resume Writing<br>
-                    • And more!<br><br>
-                    💡 <strong>Note:</strong> Please specify by email whether you want an in-person or online appointment.<br><br>
+                    ${t('bookAppointmentDesc')}
                     <div class="button-options">
-                        <button class="option-button" onclick="window.open('https://www.vwat.org/appointments/', '_blank')">Book Your Appointment Now</button>
+                        <button class="option-button" onclick="window.open('https://www.vwat.org/appointments/', '_blank')">${t('bookAppointmentButton')}</button>
                     </div>
                 </div>
             `;
             chatMessages.appendChild(messageDiv);
             scrollToBottom();
             setTimeout(() => {
-                addBotMessageWithQuickReplies('Can I help you with anything else?', ['Yes', 'No']);
+                addBotMessageWithQuickReplies(t('anythingElse'), [t('yes'), t('no')]);
             }, 500);
             return;
+        case t('contactInfo'):
         case 'Contact Information':
-            response = '📍 <strong>Address:</strong> 1756 St. Clair Ave West, Toronto ON M6N 1J3<br><br>📞 <strong>Phone:</strong> +1-647-343-8928<br>📧 <strong>Email:</strong> info@vwat.org<br>🌐 <strong>Website:</strong> <a href="https://www.vwat.org" target="_blank">www.vwat.org</a><br><br>⏰ <strong>Hours:</strong> Mon-Fri 9:00 AM - 4:30 PM<br>(Closed weekends & holidays)';
+        case 'Thông tin liên hệ':
+            response = t('contactInfoDesc');
             break;
-        case 'Free Tax Clinic':
-            response = 'Our Free Tax Clinic offers:<br><br>• Free income tax filing (CRA partnership)<br>• For individuals/families earning under $35,000-$52,500<br>• In-person support with all paperwork<br><br>📋 <strong>Required documents:</strong> Government ID, SIN, T-slips<br>📞 <strong>How to book:</strong> Contact us via phone, email, or visit our website<br>🔗 Book: <a href="https://www.vwat.org/appointments/" target="_blank">www.vwat.org/appointments</a>';
-            break;
-        case 'Food Handler Certificate':
-            response = '<strong>Food Handler Certificate Program</strong><br><br>📋 <strong>Cost:</strong> $20 plus tax (certification exam fee)<br>⏱️ <strong>Duration:</strong> About 6 hours to complete course; up to 30 days for final exam<br>✅ <strong>Mandatory:</strong> Yes, required for food service premises in Ontario<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href="https://www.vwat.org/appointments/" target="_blank">www.vwat.org/appointments</a>';
-            break;
-        case 'Free English Class':
-            response = '<strong>Free English Classes</strong><br><br>We offer:<br>• ESL Conversation Circles (for Permanent Residents)<br>• English for Employment<br>• English Conversation Circle (In-Person)<br><br>📋 <strong>Levels:</strong> Beginner to high-intermediate<br>👥 <strong>Focus:</strong> Conversational English, job readiness, networking<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href="https://www.vwat.org/appointments/" target="_blank">www.vwat.org/appointments</a>';
-            break;
-        case 'Citizenship Class':
-            response = '<strong>Canadian Citizenship Class</strong><br><br>📋 <strong>Purpose:</strong> Prepare for Canadian citizenship test<br>👥 <strong>Audience:</strong> Newcomers preparing for citizenship<br>✅ <strong>Eligibility:</strong> General newcomers; check with settlement team for specifics<br><br>📞 <strong>Contact:</strong> employment@vwat.org<br>🔗 Register: <a href="https://www.vwat.org/appointments/" target="_blank">www.vwat.org/appointments</a>';
-            break;
+        case t('backToMenu'):
         case 'Back to Menu':
-            addBotMessageWithOptions('What can I help you with?', [
-                'Services',
-                'Programs',
-                'Appointment',
-                'Contact Information'
+        case 'Quay lại Menu':
+            addBotMessageWithOptions(t('helpQuestion'), [
+                t('services'),
+                t('programs'),
+                t('events'),
+                t('appointment'),
+                t('contactInfo')
             ]);
             return;
         default:
@@ -316,7 +481,7 @@ function respondToOption(option) {
             if (program) {
                 response = program.description;
             } else {
-                response = 'I\'m here to help! Please choose an option from the menu.';
+                response = t('defaultMessage');
             }
             break;
     }
@@ -324,16 +489,21 @@ function respondToOption(option) {
     addBotMessage(response);
     
     setTimeout(() => {
-        addBotMessageWithQuickReplies('Can I help you with anything else?', ['Yes', 'No']);
+        addBotMessageWithQuickReplies(t('anythingElse'), [t('yes'), t('no')]);
     }, 500);
 }
 
+// Track if a message is being processed
+let isProcessing = false;
+
 function handleUserInput() {
     const text = userInput.value.trim();
-    if (text === '') return;
+    if (text === '' || isProcessing) return;
     
+    isProcessing = true;
     addUserMessage(text);
     userInput.value = '';
+    sendButton.disabled = true;
     
     // Check for specific intents and route to rule-based responses
     const lowerText = text.toLowerCase();
@@ -343,6 +513,8 @@ function handleUserInput() {
         showTypingIndicator();
         setTimeout(() => {
             removeTypingIndicator();
+            isProcessing = false;
+            sendButton.disabled = false;
             respondToOption('Appointment');
         }, 1000);
         return;
@@ -353,6 +525,8 @@ function handleUserInput() {
         showTypingIndicator();
         setTimeout(() => {
             removeTypingIndicator();
+            isProcessing = false;
+            sendButton.disabled = false;
             respondToOption('Services');
         }, 1000);
         return;
@@ -363,6 +537,8 @@ function handleUserInput() {
         showTypingIndicator();
         setTimeout(() => {
             removeTypingIndicator();
+            isProcessing = false;
+            sendButton.disabled = false;
             respondToOption('Programs');
         }, 1000);
         return;
@@ -373,6 +549,8 @@ function handleUserInput() {
         showTypingIndicator();
         setTimeout(() => {
             removeTypingIndicator();
+            isProcessing = false;
+            sendButton.disabled = false;
             respondToOption('Contact Information');
         }, 1000);
         return;
@@ -386,11 +564,17 @@ function handleUserInput() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ message: text })
+        body: JSON.stringify({ 
+            message: text,
+            language: currentLanguage  // Send current language to backend
+        })
     })
     .then(response => response.json())
     .then(data => {
         removeTypingIndicator();
+        isProcessing = false;
+        sendButton.disabled = false;
+        
         if (data.status === 'success') {
             // Use streaming effect for RAG responses
             addBotMessage(data.response, true);
@@ -407,16 +591,18 @@ function handleUserInput() {
             const streamingTime = words.length * 50; // 50ms per word
             
             setTimeout(() => {
-                addBotMessageWithQuickReplies('Can I help you with anything else?', ['Yes', 'No']);
+                addBotMessageWithQuickReplies(t('anythingElse'), [t('yes'), t('no')]);
             }, streamingTime + 500); // Wait for streaming + 500ms buffer
         } else {
-            addBotMessage('Sorry, I couldn\'t process your question. Please try again or select from the menu options.');
+            addBotMessage(t('errorProcessing'));
         }
     })
     .catch(error => {
         removeTypingIndicator();
+        isProcessing = false;
+        sendButton.disabled = false;
         console.error('Error:', error);
-        addBotMessage('Sorry, an error occurred. Please try again or contact us at info@vwat.org or +1-647-343-8928.');
+        addBotMessage(t('errorOccurred'));
     });
 }
 

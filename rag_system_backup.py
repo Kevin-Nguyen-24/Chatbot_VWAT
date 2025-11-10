@@ -400,15 +400,14 @@ HƯỚNG DẪN QUAN TRỌNG:
 - Sử dụng dấu đầu dòng (•) khi liệt kê nhiều mục
 - Giữ đoạn văn ngắn và dễ đọc
 - Bắt đầu ngay bằng câu trả lời
-- **QUAN TRỌNG**: TRẢ LỜI HOÀN TOÀN BẰNG TIẾNG VIỆT - Nếu thông tin trong ngữ cảnh là tiếng Anh, hãy DỊCH sang tiếng Việt
-- **BẮT BUỘC**: Tất cả các mục liệt kê phải bằng tiếng Việt, KHÔNG được để tiếng Anh
+- TRẢ LỜI BẰNG TIẾNG VIỆT
 
 NGỮ CẢNH:
 {context}
 
 CÂU HỎI: {query}
 
-CÂU TRẢ LỜI (chỉ dùng thông tin từ ngữ cảnh, DỊCH tất cả sang tiếng Việt):"""
+CÂU TRẢ LỜI (chỉ dùng thông tin từ ngữ cảnh, trả lời bằng tiếng Việt):"""
     else:  # English
         prompt = f"""You are a helpful assistant for VWAT Family Services, a non-profit organization helping refugees and immigrants in Toronto.
 
@@ -433,57 +432,6 @@ ANSWER (use only context information, answer in English):"""
     return prompt
 
 
-def is_query_relevant(query: str, language: str = 'vi') -> bool:
-    """Check if query is related to VWAT services, programs, or organization"""
-    query_lower = query.lower()
-    
-    # Keywords related to VWAT services and topics
-    vwat_keywords = [
-        # English keywords
-        'vwat', 'vietnamese', 'refugee', 'immigrant', 'immigration', 'newcomer',
-        'settlement', 'service', 'program', 'help', 'assist', 'support',
-        'appointment', 'contact', 'address', 'location', 'hours', 'email', 'phone',
-        'employment', 'job', 'work', 'language', 'english', 'esl', 'linc',
-        'housing', 'rent', 'accommodation', 'legal', 'tax', 'health', 'medical',
-        'family', 'youth', 'senior', 'children', 'education', 'school',
-        'citizenship', 'pr card', 'visa', 'document', 'translation',
-        'counseling', 'mental health', 'workshop', 'class', 'training',
-        'toronto', 'organization', 'non-profit', 'volunteer', 'donate',
-        # Vietnamese keywords
-        'dịch vụ', 'chương trình', 'hỗ trợ', 'giúp đỡ', 'người nhập cư', 'tị nạn',
-        'định cư', 'liên hệ', 'địa chỉ', 'giờ làm việc', 'điện thoại',
-        'việc làm', 'công việc', 'tiếng anh', 'nhà ở', 'thuê nhà', 'pháp lý',
-        'thuế', 'sức khỏe', 'y tế', 'gia đình', 'thanh thiếu niên', 'người cao tuổi',
-        'trẻ em', 'giáo dục', 'trường học', 'quốc tịch', 'tư vấn', 'lớp học',
-        'đào tạo', 'tổ chức', 'tình nguyện', 'quyên góp', 'hẹn gặp'
-    ]
-    
-    # Off-topic keywords that indicate irrelevant queries
-    off_topic_keywords = [
-        'weather', 'thời tiết', 'nấu ăn', 'cooking', 'recipe', 'công thức',
-        'sport', 'thể thao', 'movie', 'phim', 'music', 'nhạc',
-        'game', 'trò chơi', 'shopping', 'mua sắm', 'fashion', 'thời trang',
-        'restaurant', 'nhà hàng', 'travel', 'du lịch', 'vacation', 'nghỉ mát',
-        # Financial/currency queries
-        'usd', 'cad', 'currency', 'exchange rate', 'tỷ giá', 'dollar', 'euro',
-        'stock', 'cổ phiếu', 'crypto', 'bitcoin', 'forex', 'trading'
-    ]
-    
-    # Check for off-topic keywords first
-    for keyword in off_topic_keywords:
-        if keyword in query_lower:
-            return False
-    
-    # Check for VWAT-related keywords
-    for keyword in vwat_keywords:
-        if keyword in query_lower:
-            return True
-    
-    # If no clear match, retrieve documents and check relevance score
-    # This is more lenient for ambiguous queries
-    return True  # Let RAG system handle it if unclear
-
-
 # Main functions for Flask integration
 rag_system = None
 llm_client = None
@@ -496,23 +444,11 @@ def initialize_rag():
         llm_client = LLMClient()
     return rag_system
 
-def get_rag_response(query: str, language: str = 'vi') -> Dict[str, Any]:
-    """Get response using RAG system with language support"""
-    global rag_system, llm_client
+def is_query_relevant(query: str, language: str = 'vi') -> bool:
+    """Check if query is related to VWAT services, programs, or organization"""
+    query_lower = query.lower()
     
-    if rag_system is None:
-        initialize_rag()
-    
-    # Check if query is relevant to VWAT
-    if not is_query_relevant(query, language):
-        off_topic_msg = "Xin lỗi, tôi được thiết kế để trả lời các câu hỏi về dịch vụ và chương trình của VWAT. Vui lòng hỏi về các dịch vụ định cư, hỗ trợ người nhập cư, hoặc các chương trình của chúng tôi. Nếu bạn cần hỗ trợ, xin liên hệ info@vwat.org hoặc +1-647-343-8928." if language == 'vi' else "I apologize, but I'm designed to answer questions about VWAT services and programs. Please ask about settlement services, immigrant support, or our programs. If you need assistance, please contact info@vwat.org or +1-647-343-8928."
-        return {
-            'response': off_topic_msg,
-            'retrieved_docs': [],
-            'context': ''
-        }
-    
-    # Retrieve relevant documents
+    # Keywords related to VWAT services and topics    # Retrieve relevant documents
     retrieved_docs = rag_system.retrieve(query, top_k=5)
     
     # Check if retrieved documents have low relevance scores (below threshold)

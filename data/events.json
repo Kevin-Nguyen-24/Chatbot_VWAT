@@ -1,68 +1,62 @@
 [
   {
-    "name": "Canadian Citizenship Class",
-    "category": "Settlement / Citizenship",
-    "audience": "Newcomers preparing for citizenship",
-    "eligibility_notes": "General newcomers; check with settlement team for specifics.",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
+    "id": 1,
+    "title": "Zumba class",
+    "date": "2025-11-10",
+    "time": "10:00 AM",
+    "spots": "1 Spot",
+    "category": "Fitness",
+    "description": "Fun Zumba class for all ages",
+    "link": "https://www.vwat.org/events/"
   },
   {
-    "name": "ESL Conversation Group",
-    "category": "Language (ESL/LINC)",
-    "audience": "Permanent Residents primarily; conversation-focused practice",
-    "eligibility": "PRs; other statuses may be referred to partner agencies",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
+    "id": 2,
+    "title": "ESL for Seniors",
+    "date": "2025-11-12",
+    "time": "2:00 PM",
+    "spots": "1 Spot",
+    "category": "Education",
+    "description": "English language classes for seniors",
+    "link": "https://www.vwat.org/events/"
   },
   {
-    "name": "Nail Tech Training Program (Cohort 2)",
-    "category": "Employment / Skills Training",
-    "audience": "Newcomers and job seekers interested in nail technician careers",
-    "eligibility_notes": "Open to eligible newcomers registered with VWAT Employment Services.",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
+    "id": 3,
+    "title": "Citizenship class",
+    "date": "2025-11-14",
+    "time": "6:00 PM",
+    "spots": "1 Spot",
+    "category": "Settlement",
+    "description": "Prepare for Canadian citizenship test",
+    "link": "https://www.vwat.org/events/"
   },
   {
-    "name": "Zumba Class",
-    "category": "Health & Wellness / Seniors",
-    "audience": "Seniors participating in weekly group fitness and wellness programs",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
+    "id": 4,
+    "title": "Nail Tech Training",
+    "date": "2025-11-11",
+    "time": "9:00 AM",
+    "spots": "1 Spot",
+    "category": "Employment",
+    "description": "Professional nail technician training program",
+    "link": "https://www.vwat.org/events/"
   },
   {
-    "name": "Tai Chi Class",
-    "category": "Health & Wellness / Seniors",
-    "audience": "Seniors seeking relaxation, balance, and gentle physical exercise",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
+    "id": 5,
+    "title": "Taichi class",
+    "date": "2025-11-12",
+    "time": "8:00 AM",
+    "spots": "1 Spot",
+    "category": "Wellness",
+    "description": "Traditional Taichi exercise class",
+    "link": "https://www.vwat.org/events/"
   },
   {
-    "name": "ESL for Seniors",
-    "category": "Language / Seniors",
-    "audience": "Senior newcomers learning English for daily communication",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
-  },
-  {
-    "name": "Makeup Master Class",
-    "category": "Employment / Job Preparation",
-    "audience": "Newcomers seeking job readiness and professional presentation skills",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
-  },
-  {
-    "name": "G1 Driver’s Licence Study Support",
-    "category": "Employment / Life Skills",
-    "audience": "Newcomers preparing for G1 test",
-    "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
-  },
-  {
-  "name": "English Conversation Circle (In-Person)",
-  "category": "Education / Employment",
-  "audience": "Newcomers looking to practice conversational English and build networking skills",
-  "eligibility_notes": "Open to all newcomers; recommended for those seeking to improve daily communication and confidence in English.",
-  "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
-},
-{
-  "name": "English for Employment (In-Person)",
-  "category": "Education / Employment",
-  "audience": "Newcomers seeking to improve English for job readiness and workplace communication",
-  "eligibility_notes": "Open to newcomers focused on employment preparation and skill-building.",
-  "how_to_join": "Contact employment@vwat.org or register via VWAT Appointments Portal."
-}
-
+    "id": 6,
+    "title": "Makeup Masterclass",
+    "date": "2025-11-15",
+    "time": "1:00 PM",
+    "spots": "1 Spot",
+    "category": "Skills",
+    "description": "Learn professional makeup techniques",
+    "link": "https://www.vwat.org/events/"
+  }
 ]

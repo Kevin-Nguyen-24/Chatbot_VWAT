@@ -1,0 +1,106 @@
+[
+  {
+    "id": 2,
+    "name": "Lớp Học Quốc Tịch",
+    "category": "Định cư / Quốc tịch",
+    "description": "<strong>Lớp Học Quốc Tịch Canada</strong><br><br>📋 <strong>Mục đích:</strong> Chuẩn bị cho kỳ thi quốc tịch Canada<br>👥 <strong>Đối tượng:</strong> Người nhập cư mới chuẩn bị xin quốc tịch<br>✅ <strong>Điều kiện:</strong> Người nhập cư mới nói chung; kiểm tra với nhóm định cư để biết chi tiết<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 3,
+    "name": "Câu Lạc Bộ Hội Thoại Tiếng Anh (Trực Tiếp)",
+    "category": "Giáo dục / Việc làm",
+    "description": "<strong>Câu Lạc Bộ Hội Thoại Tiếng Anh (Trực Tiếp)</strong><br><br>👥 <strong>Đối tượng:</strong> Người nhập cư mới muốn thực hành tiếng Anh giao tiếp và xây dựng kỹ năng kết nối<br>✅ <strong>Điều kiện:</strong> Mở cho tất cả người nhập cư mới; được khuyến nghị cho những người muốn cải thiện giao tiếp hàng ngày và tự tin với tiếng Anh<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 4,
+    "name": "Tiếng Anh Cho Việc Làm (Trực Tiếp)",
+    "category": "Giáo dục / Việc làm",
+    "description": "<strong>Tiếng Anh Cho Việc Làm (Trực Tiếp)</strong><br><br>👥 <strong>Đối tượng:</strong> Người nhập cư mới muốn cải thiện tiếng Anh để chuẩn bị việc làm và giao tiếp tại nơi làm việc<br>✅ <strong>Điều kiện:</strong> Mở cho người nhập cư mới tập trung vào chuẩn bị việc làm và xây dựng kỹ năng<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 5,
+    "name": "Nhóm Hội Thoại ESL",
+    "category": "Ngôn ngữ (ESL/LINC)",
+    "description": "<strong>Nhóm Hội Thoại ESL</strong><br><br>👥 <strong>Đối tượng:</strong> Chủ yếu dành cho Thường trú nhân; thực hành tập trung vào hội thoại<br>✅ <strong>Điều kiện:</strong> Thường trú nhân; các tình trạng khác có thể được giới thiệu đến các tổ chức đối tác<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 6,
+    "name": "ESL Cho Người Cao Tuổi",
+    "category": "Ngôn ngữ / Người cao tuổi",
+    "description": "<strong>ESL Cho Người Cao Tuổi</strong><br><br>👥 <strong>Đối tượng:</strong> Người cao tuổi nhập cư mới học tiếng Anh để giao tiếp hàng ngày<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 8,
+    "name": "Chứng Chỉ Xử Lý Thực Phẩm",
+    "category": "Việc làm / Đào tạo Kỹ năng",
+    "description": "<strong>Chương Trình Chứng Chỉ Xử Lý Thực Phẩm</strong><br><br>📋 <strong>Chi phí:</strong> $20 cộng thuế (phí thi chứng chỉ)<br>⏱️ <strong>Thời lượng:</strong> Khoảng 6 giờ để hoàn thành khóa học; lên đến 30 ngày cho kỳ thi cuối khóa<br>✅ <strong>Bắt buộc:</strong> Có, bắt buộc cho các cơ sở dịch vụ thực phẩm ở Ontario<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 9,
+    "name": "Lớp Tiếng Anh Miễn Phí",
+    "category": "Giáo dục / Ngôn ngữ",
+    "description": "<strong>Lớp Tiếng Anh Miễn Phí</strong><br><br>Chúng tôi cung cấp:<br>• Câu lạc bộ Hội thoại ESL (dành cho Thường trú nhân)<br>• Tiếng Anh cho Việc làm<br>• Câu lạc bộ Hội thoại Tiếng Anh (Trực tiếp)<br><br>📋 <strong>Trình độ:</strong> Từ cơ bản đến trung cấp cao<br>👥 <strong>Tập trung:</strong> Tiếng Anh giao tiếp, chuẩn bị việc làm, tạo mạng lưới<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 7,
+    "name": "Phòng Khám Thuế Miễn Phí",
+    "category": "Thuế & Dịch vụ Tài chính",
+    "description": "<strong>Phòng Khám Thuế Miễn Phí</strong><br><br>Phòng khám Miễn phí của chúng tôi cung cấp:<br>• Khai thuế thu nhập miễn phí (đối tác CRA)<br>• Dành cho cá nhân/gia đình có thu nhập dưới $35,000-$52,500<br>• Hỗ trợ trực tiếp với tất cả giấy tờ<br><br>📋 <strong>Tài liệu yêu cầu:</strong> ID chính phủ, SIN, phiếu T<br>📞 <strong>Cách đặt lịch:</strong> Liên hệ qua điện thoại, email hoặc truy cập website<br>🔗 Đặt lịch: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 10,
+    "name": "Hỗ Trợ Học Bằng Lái Xe G1",
+    "category": "Việc làm / Kỹ năng Sống",
+    "description": "<strong>Hỗ Trợ Học Bằng Lái Xe G1</strong><br><br>👥 <strong>Đối tượng:</strong> Người nhập cư mới chuẩn bị thi G1<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 11,
+    "name": "Lớp Học Trang Điểm Chuyên Nghiệp",
+    "category": "Việc làm / Chuẩn bị Công việc",
+    "description": "<strong>Lớp Học Trang Điểm Chuyên Nghiệp</strong><br><br>👥 <strong>Đối tượng:</strong> Người nhập cư mới tìm kiếm chuẩn bị việc làm và kỹ năng trình bày chuyên nghiệp<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 12,
+    "name": "Chương Trình Đào Tạo Kỹ Thuật Viên Nail (Khóa 2)",
+    "category": "Việc làm / Đào tạo Kỹ năng",
+    "description": "<strong>Chương Trình Đào Tạo Kỹ Thuật Viên Nail (Khóa 2)</strong><br><br>👥 <strong>Đối tượng:</strong> Người nhập cư mới và người tìm việc quan tâm đến nghề kỹ thuật viên nail<br>✅ <strong>Điều kiện:</strong> Mở cho người nhập cư mới đủ điều kiện đăng ký với Dịch vụ Việc làm VWAT<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/events/\" target=\"_blank\">www.vwat.org/events</a>",
+    "expired": "no",
+    "news": "yes"
+  },
+  {
+    "id": 13,
+    "name": "Lớp Thái Cực Quyền",
+    "category": "Sức khỏe & Thể chất / Người cao tuổi",
+    "description": "<strong>Lớp Thái Cực Quyền</strong><br><br>👥 <strong>Đối tượng:</strong> Người cao tuổi tìm kiếm thư giãn, cân bằng và tập thể dục nhẹ nhàng<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  },
+  {
+    "id": 14,
+    "name": "Lớp Zumba",
+    "category": "Sức khỏe & Thể chất / Người cao tuổi",
+    "description": "<strong>Lớp Zumba</strong><br><br>👥 <strong>Đối tượng:</strong> Người cao tuổi tham gia các chương trình thể dục nhóm và chăm sóc sức khỏe hàng tuần<br><br>📞 <strong>Liên hệ:</strong> employment@vwat.org<br>🔗 Đăng ký: <a href=\"https://www.vwat.org/appointments/\" target=\"_blank\">www.vwat.org/appointments</a>",
+    "expired": "no",
+    "news": "no"
+  }
+]
