@@ -9,3 +9,6 @@ numpy
 tiktoken
 langchain
 langchain-community
+psutil
+portalocker
+gunicorn

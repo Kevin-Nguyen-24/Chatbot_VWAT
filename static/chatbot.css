@@ -167,6 +167,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.4;
 }
 
 .option-button:hover {

@@ -12,6 +12,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.http import models
 import requests
 import numpy as np
+from portalocker import exceptions as portalocker_exceptions
 
 
 class DocumentProcessor:
@@ -109,7 +110,29 @@ class DocumentProcessor:
         filename = os.path.basename(filepath)
         
         # Handle different JSON structures
-        if filename == 'faqs.json' or filename == 'faq_converted.json':
+        if filename == 'vwat_complete_rag_data.json':
+            # Handle the comprehensive RAG-optimized data
+            for item in data:
+                if isinstance(item, dict):
+                    title = item.get('title', '')
+                    content = item.get('content', '')
+                    category = item.get('category', '')
+                    keywords = item.get('keywords', [])
+                    
+                    text = f"{title}\n\n{content}"
+                    if keywords:
+                        text += f"\n\nKeywords: {', '.join(keywords)}"
+                    
+                    metadata = {
+                        'source': filename,
+                        'type': 'rag_optimized',
+                        'category': category,
+                        'id': item.get('id', ''),
+                        'keywords': keywords
+                    }
+                    chunks.extend(self.chunk_text(text, metadata))
+        
+        elif filename == 'faqs.json' or filename == 'faq_converted.json':
             for item in data:
                 if isinstance(item, dict):
                     q = item.get('q', item.get('Unnamed: 0', ''))
@@ -202,6 +225,9 @@ class DocumentProcessor:
 class RAGSystem:
     """Complete RAG system with Qdrant vector database"""
     
+    _instance = None
+    _lock_file = None
+    
     def __init__(self, 
                  embedding_model_name='paraphrase-multilingual-MiniLM-L12-v2',
                  qdrant_path='./qdrant_data',
@@ -209,15 +235,74 @@ class RAGSystem:
         
         self.embedding_model = SentenceTransformer(embedding_model_name)
         self.embedding_dim = self.embedding_model.get_sentence_embedding_dimension()
+        self.qdrant_path = qdrant_path
         
-        # Initialize Qdrant client (local mode)
-        self.client = QdrantClient(path=qdrant_path)
+        # Initialize Qdrant client with retry logic for Windows file locking
+        import time
+        max_retries = 5
+        retry_delay = 3
+        
+        for attempt in range(max_retries):
+            try:
+                # Try to clean up stale lock files first
+                if attempt > 0:
+                    self._cleanup_stale_locks(qdrant_path)
+                
+                self.client = QdrantClient(path=qdrant_path)
+                print(f"Successfully connected to Qdrant at {qdrant_path}")
+                break
+            except (RuntimeError, portalocker_exceptions.AlreadyLocked) as e:
+                if attempt < max_retries - 1:
+                    print(f"Qdrant locked, waiting {retry_delay} seconds... (attempt {attempt + 1}/{max_retries})")
+                    print(f"Tip: Close any other Python processes accessing {qdrant_path}")
+                    time.sleep(retry_delay)
+                else:
+                    raise RuntimeError(
+                        f"Cannot access Qdrant storage at {qdrant_path}. \n"
+                        "Please ensure no other instances are running.\n"
+                        "Try the following:\n"
+                        "1. Close any other Python processes with Task Manager\n"
+                        f"2. Delete the lock file at: {qdrant_path}/.lock\n"
+                        "3. Restart your application"
+                    ) from e
+        
         self.collection_name = collection_name
-        
         self.processor = DocumentProcessor()
         
         # Initialize collection
         self._init_collection()
+    
+    def _cleanup_stale_locks(self, qdrant_path):
+        """Try to clean up stale lock files if they exist"""
+        import psutil
+        lock_file = os.path.join(qdrant_path, '.lock')
+        
+        if os.path.exists(lock_file):
+            try:
+                # Check if any Python process is actually using the Qdrant path
+                qdrant_in_use = False
+                for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                    try:
+                        if proc.info['name'] and 'python' in proc.info['name'].lower():
+                            cmdline = proc.info.get('cmdline', [])
+                            if cmdline and any(qdrant_path in str(arg) for arg in cmdline):
+                                # Check if process is actually alive and responsive
+                                if proc.is_running() and proc.status() != psutil.STATUS_ZOMBIE:
+                                    qdrant_in_use = True
+                                    break
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        continue
+                
+                # If no active process is using it, try to remove the lock
+                if not qdrant_in_use:
+                    print(f"Attempting to remove stale lock file: {lock_file}")
+                    try:
+                        os.remove(lock_file)
+                        print("Stale lock file removed successfully")
+                    except PermissionError:
+                        print("Lock file is still in use by another process")
+            except Exception as e:
+                print(f"Warning: Could not check for stale locks: {e}")
     
     def _init_collection(self):
         """Initialize Qdrant collection"""
@@ -234,6 +319,19 @@ class RAGSystem:
             )
             print(f"Created collection '{self.collection_name}'")
     
+    def close(self):
+        """Properly close the Qdrant client and release locks"""
+        if hasattr(self, 'client') and self.client:
+            try:
+                self.client.close()
+                print("Qdrant client closed successfully")
+            except Exception as e:
+                print(f"Error closing Qdrant client: {e}")
+    
+    def __del__(self):
+        """Ensure cleanup on deletion"""
+        self.close()
+    
     def embed_texts(self, texts: List[str]) -> np.ndarray:
         """Generate embeddings for texts"""
         embeddings = self.embedding_model.encode(texts, show_progress_bar=True)
@@ -243,14 +341,10 @@ class RAGSystem:
         """Index all documents from data directory"""
         json_files = [
             'faqs.json',
-            'services.json',
-            'programs.json',
-            'programs_vietnamese.json',
             'org.json',
             'contacts.json',
-            'faq_converted.json',
-            'VWAT_organise_converted.json',
-            'vwat_services_master_rag_converted.json'
+            'vwat_complete_rag_data.json'
+
         ]
         
         all_chunks = []
@@ -337,7 +431,7 @@ class RAGSystem:
 class LLMClient:
     """Client for Ollama/Gemma LLM API"""
     
-    def __init__(self, api_url='https://ollama-gemma-324573599995.us-central1.run.app'):
+    def __init__(self, api_url='https://ollama-gemma-683508575972.us-central1.run.app'):
         self.api_url = api_url.rstrip('/')
     
     def generate(self, prompt: str, max_tokens=512, temperature=0.7, stream=False) -> str:
@@ -373,6 +467,10 @@ class LLMClient:
                     return result.get('response', result.get('text', result.get('content', '')))
                 elif response.status_code == 404:
                     continue  # Try next endpoint
+                elif response.status_code == 429 or response.status_code == 503:
+                    # Rate limit or quota exceeded - return error to trigger fallback
+                    print(f"Quota limit exceeded (status {response.status_code})")
+                    return "QuotaLimit: API quota exceeded"
                 else:
                     print(f"API returned status {response.status_code} for {endpoint}")
                     continue
@@ -402,6 +500,8 @@ HƯỚNG DẪN QUAN TRỌNG:
 - Bắt đầu ngay bằng câu trả lời
 - **QUAN TRỌNG**: TRẢ LỜI HOÀN TOÀN BẰNG TIẾNG VIỆT - Nếu thông tin trong ngữ cảnh là tiếng Anh, hãy DỊCH sang tiếng Việt
 - **BẮT BUỘC**: Tất cả các mục liệt kê phải bằng tiếng Việt, KHÔNG được để tiếng Anh
+- KHÔNG được bao gồm bất kỳ mã HTML, thẻ hoặc thuộc tính (như href=, target=, v.v.) trong câu trả lời
+- Khi đề cập đến trang web, chỉ viết dưới dạng văn bản thuần túy (ví dụ: "Website: www.vwat.org" không phải "Website: href='www.vwat.org'")
 
 NGỮ CẢNH:
 {context}
@@ -422,6 +522,8 @@ IMPORTANT INSTRUCTIONS:
 - Keep paragraphs short and easy to read
 - Start with the answer immediately
 - ANSWER IN ENGLISH
+- DO NOT include any HTML code, tags, or attributes (like href=, target=, etc.) in your response
+- When mentioning websites, write them as plain text only (e.g., "Website: www.vwat.org" not "Website: href='www.vwat.org'")
 
 CONTEXT:
 {context}
@@ -460,8 +562,8 @@ def is_query_relevant(query: str, language: str = 'vi') -> bool:
     
     # Off-topic keywords that indicate irrelevant queries
     off_topic_keywords = [
-        'weather', 'thời tiết', 'nấu ăn', 'cooking', 'recipe', 'công thức',
-        'sport', 'thể thao', 'movie', 'phim', 'music', 'nhạc',
+        'weather', 'thời tiết', 'nấu ăn', 'cooking', 'recipe', 'công thức', 'cook', 'pasta', 'food',
+        'sport', 'thể thao', 'movie', 'phim', 'music', 'nhạc', 'football', 'soccer', 'basketball',
         'game', 'trò chơi', 'shopping', 'mua sắm', 'fashion', 'thời trang',
         'restaurant', 'nhà hàng', 'travel', 'du lịch', 'vacation', 'nghỉ mát',
         # Financial/currency queries
@@ -496,74 +598,95 @@ def initialize_rag():
         llm_client = LLMClient()
     return rag_system
 
+def cleanup_rag():
+    """Cleanup RAG system resources"""
+    global rag_system, llm_client
+    if rag_system is not None:
+        rag_system.close()
+        rag_system = None
+    llm_client = None
+
+def clean_html_artifacts(text: str) -> str:
+    """Remove malformed HTML tags and attributes from LLM responses"""
+    import re
+    
+    # AGGRESSIVE: Remove the exact pattern we're seeing: Website: href="..." target="...">URL
+    text = re.sub(r'Website:\s*href\s*=\s*["\'][^"\'>]*["\']\s*target\s*=\s*["\'][^"\'>]*["\']\s*>\s*(www\.[^\s<]+|https?://[^\s<]+)', 
+                  r'Website: \1', text, flags=re.IGNORECASE)
+    
+    # Remove href attributes that appear as text (various formats)
+    text = re.sub(r'\s*href\s*=\s*["\'][^"\'>]*["\']', '', text, flags=re.IGNORECASE)
+    
+    # Remove target attributes
+    text = re.sub(r'\s*target\s*=\s*["\'][^"\'>]*["\']', '', text, flags=re.IGNORECASE)
+    
+    # Remove any remaining HTML-like attributes (rel, class, etc.)
+    text = re.sub(r'\s+\w+\s*=\s*["\'][^"\'>]*["\']', '', text)
+    
+    # Remove standalone opening/closing angle brackets followed by URLs
+    text = re.sub(r'>\s*(https?://[^\s<]+|www\.[^\s<]+)', r'\1', text)
+    text = re.sub(r'<\s*(https?://[^\s>]+|www\.[^\s>]+)', r'\1', text)
+    
+    # Remove standalone angle brackets that aren't part of valid HTML
+    text = re.sub(r'(?<!<br)>(?![^<]*</)', '', text)
+    
+    # Clean up "Website:" prefix that may have gotten mangled  
+    text = re.sub(r'Website:\s{2,}', 'Website: ', text)
+    
+    # Remove any leftover HTML tags except <br>
+    text = re.sub(r'<(?!br\s*/?)[^>]+>', '', text)
+    
+    return text.strip()
+
 def get_rag_response(query: str, language: str = 'vi') -> Dict[str, Any]:
-    """Get response using RAG system with language support"""
+    """Get response using RAG system with language support - LLM-driven responses only"""
     global rag_system, llm_client
     
     if rag_system is None:
         initialize_rag()
     
-    # Check if query is relevant to VWAT
+    # Check if query is off-topic
     if not is_query_relevant(query, language):
-        off_topic_msg = "Xin lỗi, tôi được thiết kế để trả lời các câu hỏi về dịch vụ và chương trình của VWAT. Vui lòng hỏi về các dịch vụ định cư, hỗ trợ người nhập cư, hoặc các chương trình của chúng tôi. Nếu bạn cần hỗ trợ, xin liên hệ info@vwat.org hoặc +1-647-343-8928." if language == 'vi' else "I apologize, but I'm designed to answer questions about VWAT services and programs. Please ask about settlement services, immigrant support, or our programs. If you need assistance, please contact info@vwat.org or +1-647-343-8928."
+        if language == 'vi':
+            off_topic_response = "Xin lỗi, câu hỏi này nằm ngoài phạm vi hỗ trợ của tôi. Tôi được thiết kế để hỗ trợ về các dịch vụ và chương trình của VWAT Family Services.<br><br>Vui lòng hỏi về:<br>• Dịch vụ định cư cho người mới đến Canada<br>• Hỗ trợ việc làm và đào tạo<br>• Lớp học tiếng Anh<br>• Dịch vụ cho người cao tuổi và thanh thiếu niên<br>• Thông tin liên hệ và đặt lịch hẹn"
+        else:
+            off_topic_response = "I apologize, but this question is outside my area of support. I'm designed to help with VWAT Family Services programs and services.<br><br>Please ask about:<br>• Settlement services for newcomers to Canada<br>• Employment and training support<br>• English language classes<br>• Services for seniors and youth<br>• Contact information and appointments"
         return {
-            'response': off_topic_msg,
+            'response': off_topic_response,
             'retrieved_docs': [],
             'context': ''
         }
     
-    # Retrieve relevant documents
+    # Retrieve relevant documents - let LLM decide relevance
     retrieved_docs = rag_system.retrieve(query, top_k=5)
     
-    # Check if retrieved documents have low relevance scores (below threshold)
-    if not retrieved_docs or (retrieved_docs and retrieved_docs[0]['score'] < 0.3):
-        # Low relevance - likely off-topic or not in knowledge base
-        if not retrieved_docs:
-            no_info_msg = "Xin lỗi, tôi không tìm thấy thông tin về điều đó trong cơ sở dữ liệu của VWAT. Tôi chỉ có thể trả lời các câu hỏi về dịch vụ, chương trình và hoạt động của VWAT. Vui lòng liên hệ info@vwat.org hoặc +1-647-343-8928 để được hỗ trợ." if language == 'vi' else "I apologize, but I couldn't find information about that in VWAT's knowledge base. I can only answer questions about VWAT's services, programs, and activities. Please contact info@vwat.org or +1-647-343-8928 for assistance."
-        else:
-            no_info_msg = "Xin lỗi, câu hỏi của bạn có vẻ không liên quan đến dịch vụ của VWAT. Tôi được thiết kế để trả lời các câu hỏi về dịch vụ định cư, hỗ trợ người nhập cư, và các chương trình của VWAT. Bạn có thể hỏi tôi về các dịch vụ, chương trình, giờ làm việc, hoặc cách liên hệ với VWAT." if language == 'vi' else "I apologize, but your question doesn't seem to be related to VWAT services. I'm designed to answer questions about settlement services, immigrant support, and VWAT programs. You can ask me about our services, programs, hours, or how to contact VWAT."
-        return {
-            'response': no_info_msg,
-            'retrieved_docs': [],
-            'context': ''
-        }
-    
-    # Generate context
+    # Generate context from retrieved documents
     context = rag_system.generate_context(retrieved_docs)
     
     # Create prompt with language parameter
     prompt = create_rag_prompt(query, context, language)
     
-    # Generate response
-    response = llm_client.generate(prompt)
-    
-    # Convert newlines to HTML breaks for proper display
-    if response and "Error" not in response and "trouble connecting" not in response:
-        response = response.replace('\n', '<br>')
-    
-    # If LLM fails, use the top retrieved document as fallback
-    if "Error" in response or "trouble connecting" in response:
-        # Extract answer from top document
-        top_doc = retrieved_docs[0]
-        # Clean up the text - if it's FAQ format, extract just the answer
-        text = top_doc['text']
-        if 'Answer:' in text:
-            # Extract answer part from Q&A format
-            parts = text.split('Answer:')
-            if len(parts) > 1:
-                answer = parts[1].strip()
-                response = answer
-            else:
-                response = text
-        elif 'Question:' in text and 'Answer:' not in text:
-            # If it's just a question without answer, skip it
-            fallback_msg = "Tôi tìm thấy thông tin về điều đó. Vui lòng liên hệ chúng tôi tại info@vwat.org hoặc +1-647-343-8928 để biết chi tiết." if language == 'vi' else "I found information about that. Please contact us at info@vwat.org or +1-647-343-8928 for details."
-            response = fallback_msg
-        else:
-            response = text
+    # Generate response using LLM
+    try:
+        response = llm_client.generate(prompt)
         
-        # Format the response with HTML line breaks for better display
-        response = response.replace('\n', '<br>')
+        # Clean up any HTML artifacts from the response
+        if response and "Error" not in response:
+            # FIRST: Clean HTML artifacts BEFORE doing anything else
+            response = clean_html_artifacts(response)
+            # SECOND: Convert newlines to HTML breaks for proper display
+            response = response.replace('\n', '<br>')
+            # THIRD: Clean again in case any HTML slipped through
+            response = clean_html_artifacts(response)
+        else:
+            # If LLM returns an error, provide graceful fallback
+            error_msg = "Xin lỗi, tôi gặp sự cố khi xử lý câu hỏi của bạn. Vui lòng thử lại hoặc liên hệ info@vwat.org / +1-647-343-8928." if language == 'vi' else "I apologize, I encountered an issue processing your question. Please try again or contact info@vwat.org / +1-647-343-8928."
+            response = error_msg
+    
+    except Exception as e:
+        print(f"LLM generation failed: {str(e)}")
+        error_msg = "Xin lỗi, tôi gặp sự cố khi xử lý câu hỏi của bạn. Vui lòng thử lại hoặc liên hệ info@vwat.org / +1-647-343-8928." if language == 'vi' else "I apologize, I encountered an issue processing your question. Please try again or contact info@vwat.org / +1-647-343-8928."
+        response = error_msg
     
     return {
         'response': response,
