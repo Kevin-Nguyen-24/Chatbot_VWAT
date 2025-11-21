@@ -431,7 +431,7 @@ class RAGSystem:
 class LLMClient:
     """Client for Ollama/Gemma LLM API"""
     
-    def __init__(self, api_url='https://ollama-gemma-683508575972.us-central1.run.app'):
+    def __init__(self, api_url='https://ollama-gemma-683508575972.us-central1.run.app/'):
         self.api_url = api_url.rstrip('/')
     
     def generate(self, prompt: str, max_tokens=512, temperature=0.7, stream=False) -> str:
