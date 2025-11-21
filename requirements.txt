@@ -1,0 +1,14 @@
+flask
+openpyxl
+pandas
+qdrant-client
+sentence-transformers
+torch
+requests
+numpy
+tiktoken
+langchain
+langchain-community
+psutil
+portalocker
+gunicorn

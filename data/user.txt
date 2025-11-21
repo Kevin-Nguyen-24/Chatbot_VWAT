@@ -1,0 +1,10 @@
+[2025-11-18 18:50:51] [user_1763500805442_a2l43o03v] [en] i want trainning
+[2025-11-18 19:47:24] [user_1763500805442_a2l43o03v] [en] where vwat loaction
+[2025-11-18 19:48:42] [user_1763500805442_a2l43o03v] [en] what vwat stand for
+[2025-11-18 19:58:03] [user_1763500805442_a2l43o03v] [en] Why should I donate to VWAT?
+[2025-11-20 16:49:09] [user_1763500805442_a2l43o03v] [en] what vwat stand for
+[2025-11-20 16:53:28] [user_1763500805442_a2l43o03v] [en] tell me weather today
+[2025-11-20 16:53:45] [user_1763500805442_a2l43o03v] [en] tell me raptor today
+[2025-11-20 17:02:27] [user_1763500805442_a2l43o03v] [en] tell me weather
+[2025-11-20 18:57:12] [user_1763682988621_4gndwnznw] [vi] what weather today
+[2025-11-20 19:01:46] [user_1763682988621_4gndwnznw] [en] what usd/cad today

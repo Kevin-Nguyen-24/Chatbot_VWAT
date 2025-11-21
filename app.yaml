@@ -1,0 +1,24 @@
+runtime: python311
+
+# App Engine configuration
+instance_class: F4_1G
+
+# Automatic scaling
+automatic_scaling:
+  target_cpu_utilization: 0.65
+  min_instances: 1
+  max_instances: 10
+
+# Environment variables
+env_variables:
+  PYTHONUNBUFFERED: "1"
+
+# Entry point
+entrypoint: python app.py
+
+# Handlers
+handlers:
+- url: /static
+  static_dir: static
+- url: /.*
+  script: auto
